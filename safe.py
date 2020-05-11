@@ -252,15 +252,28 @@ def str_mj_arr(arr):
 def print_contact_info(env):
     d = env.unwrapped.data
     for coni in range(d.ncon):
-        print('  Contact %d:' % (coni,))
+        #print('  Contact %d:' % (coni,))
         con = d.obj.contact[coni]
-        print('    dist     = %0.3f' % (con.dist,))
-        print('    pos      = %s' % (str_mj_arr(con.pos),))
-        print('    frame    = %s' % (str_mj_arr(con.frame),))
-        print('    friction = %s' % (str_mj_arr(con.friction),))
-        print('    dim      = %d' % (con.dim,))
-        print('    geom1    = %d' % (con.geom1,))
-        print('    geom2    = %d' % (con.geom2,))
+        #print('    dist     = %0.3f' % (con.dist,))
+        #print('    pos      = %s' % (str_mj_arr(con.pos),))
+        #print('    frame    = %s' % (str_mj_arr(con.frame),))
+        #print('    friction = %s' % (str_mj_arr(con.friction),))
+        ##print('    dim      = %d' % (con.dim,))
+        #print('    geom1    = %d' % (con.geom1,))
+        #print('    geom2    = %d' % (con.geom2,))
+        #geom2 is 2 is good for us
+        #1 is good too
+        if int(con.geom2) == 1 or int(con.geom2) == 2:
+            print("UNSAFE")
+       
+def is_safe(env):
+    d = env.unwrapped.data
+    ret = 1
+    for coni in range(d.ncon):
+        con = d.obj.contact[coni]
+        if int(con.geom2) == 1 or int(con.geom2) == 2:
+            ret = 0
+    return(ret)
 
 if __name__=='__main__':
 	hyper_parameter_name=sys.argv[1]
@@ -307,9 +320,9 @@ if __name__=='__main__':
 			#print(episode, t , s , a)
 			sp,r,done,_=env.step(numpy.array(a))
 			s,t,G=sp,t+1,G+r
-			print("============================================")
-			print(print_contact_info(env))
-			input()
+			#print("============================================")
+			#print(is_safe(env))
+			#input()
 			env.render()
 		#print(env.env.data.qpos[0])
 		print("in episode {} we collected return {} in {} timesteps".format(episode,G,t))
