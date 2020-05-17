@@ -266,14 +266,24 @@ def print_contact_info(env):
         if int(con.geom2) == 1 or int(con.geom2) == 2:
             print("UNSAFE")
        
-def is_safe(env):
-    d = env.unwrapped.data
-    ret = 1
-    for coni in range(d.ncon):
-        con = d.obj.contact[coni]
-        if int(con.geom2) == 1 or int(con.geom2) == 2:
-            ret = 0
-    return(ret)
+def is_safe(params):
+	env = params["env"]
+	if params["env_name"] == 'HalfCheetah-v1':
+	    d = env.unwrapped.data
+	    ret = 1
+	    for coni in range(d.ncon):
+	        con = d.obj.contact[coni]
+	        if int(con.geom2) == 1 or int(con.geom2) == 2:
+	            ret = 0
+	    return(ret)
+	elif params["env_name"] == 'Pendulum-v0':
+		if abs(s[-1])>4:
+			#print(s[-1])
+			return 0
+		return 1
+	else:
+		print("safety not defined for this domain yet")
+		assert False
 
 if __name__=='__main__':
 	hyper_parameter_name=sys.argv[1]
@@ -294,6 +304,7 @@ if __name__=='__main__':
 	utils_for_q_learning.sync_networks(target = Q_object_target, online = Q_object, alpha = params['target_network_learning_rate'], copy = True)
 
 	G_li=[]
+	safety_li=[]
 	for episode in range(params['max_episode']):
 		#train policy with exploration
 		s,done=env.reset(),False
@@ -312,7 +323,7 @@ if __name__=='__main__':
 			Q_object.update(Q_object_target)
 
 		#test the learned policy, without performing any exploration
-		s,t,G,done=env.reset(),0,0,False
+		s,t,G,done,safe=env.reset(),0,0,False,0
 		while done==False:
 			#print(env.env.model)
 			#print(env.env.data.qpos)
@@ -321,14 +332,18 @@ if __name__=='__main__':
 			sp,r,done,_=env.step(numpy.array(a))
 			s,t,G=sp,t+1,G+r
 			#print("============================================")
-			#print(is_safe(env))
+			safe = is_safe(params)+safe
 			#input()
-			env.render()
+			#env.render()
 		#print(env.env.data.qpos[0])
+		print("safety density", safe/t)
 		print("in episode {} we collected return {} in {} timesteps".format(episode,G,t))
 		G_li.append(G)
-		if episode % 10 == 0 and episode>0:	
-			utils_for_q_learning.save(G_li,params,alg)
+		safety_li.append(safe/t)
+		if episode % 5 == 0 and episode>0:	
+			utils_for_q_learning.save(G_li,params,alg,for_safety=False)
+			utils_for_q_learning.save(safety_li,params,alg,for_safety=True)
 			#Q_object.network.save_weights("rbf_policies/"+hyper_parameter_name+"_model.h5")
 
-	utils_for_q_learning.save(G_li,params,alg)
+	utils_for_q_learning.save(G_li,params,alg,for_safety=False)
+	utils_for_q_learning.save(safety_li,params,alg,for_safety=True)
