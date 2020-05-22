@@ -303,7 +303,7 @@ if __name__=='__main__':
 
 	utils_for_q_learning.sync_networks(target = Q_object_target, online = Q_object, alpha = params['target_network_learning_rate'], copy = True)
 
-	G_li=[]
+	G_li,Gp_li=[],[]
 	safety_li=[]
 	for episode in range(params['max_episode']):
 		#train policy with exploration
@@ -315,6 +315,8 @@ if __name__=='__main__':
 			a=Q_object.e_greedy_policy(s,episode+1,'train')
 			#print(s,a)
 			sp,r,done,_=env.step(numpy.array(a))
+			rp = (1-is_safe(params))*params['Rmin']
+			r = r + rp
 			Q_object.buffer_object.append(s,a,r,done,sp)
 			s=sp
 
@@ -323,7 +325,7 @@ if __name__=='__main__':
 			Q_object.update(Q_object_target)
 
 		#test the learned policy, without performing any exploration
-		s,t,G,done,safe=env.reset(),0,0,False,0
+		s,t,G,done,safe,Gp=env.reset(),0,0,False,0,0
 		while done==False:
 			#print(env.env.model)
 			#print(env.env.data.qpos)
@@ -333,17 +335,23 @@ if __name__=='__main__':
 			s,t,G=sp,t+1,G+r
 			#print("============================================")
 			safe = is_safe(params)+safe
+			rp = (1-is_safe(params))*params['Rmin']
+			Gp = Gp + r+rp
+
 			#input()
 			#env.render()
 		#print(env.env.data.qpos[0])
 		print("safety density", safe/t)
 		print("in episode {} we collected return {} in {} timesteps".format(episode,G,t))
 		G_li.append(G)
+		Gp_li.append(Gp)
 		safety_li.append(safe/t)
 		if episode % 5 == 0 and episode>0:	
-			utils_for_q_learning.save(G_li,params,alg,for_safety=False)
-			utils_for_q_learning.save(safety_li,params,alg,for_safety=True)
+			utils_for_q_learning.save(G_li,params,alg,for_safety=0)
+			utils_for_q_learning.save(safety_li,params,alg,for_safety=1)
+			utils_for_q_learning.save(Gp_li,params, alg,for_safety=2)
 			#Q_object.network.save_weights("rbf_policies/"+hyper_parameter_name+"_model.h5")
 
-	utils_for_q_learning.save(G_li,params,alg,for_safety=False)
-	utils_for_q_learning.save(safety_li,params,alg,for_safety=True)
+	utils_for_q_learning.save(G_li,params,alg,for_safety=0)
+	utils_for_q_learning.save(safety_li,params,alg,for_safety=1)
+	utils_for_q_learning.save(Gp_li,alg,for_safety=2)
