@@ -33,7 +33,7 @@ ylim_up = [-100,235,300,3000,8000,3000,9350,1000,-4]
 for ind, problem in enumerate([0,4]):
 	plt.subplot(3,4,2*ind+1)
 	print(problems_name[problem])
-	for setting in [0,1,2,3,4]:
+	for setting in [0,1,2,3,4,5,6]:
 		hyper_parameter_name=10*problem+setting
 		li=[]
 		for seed_num in range(30):
@@ -45,10 +45,6 @@ for ind, problem in enumerate([0,4]):
 				pass
 		#print([len(x) for x in li])
 		li=truncate(li)
-		print(hyper_parameter_name,
-			numpy.mean(li),len(li),
-			len(li[0]),
-			numpy.mean(numpy.mean(li,axis=0)[-10:]))
 		plt.plot(smooth(numpy.mean(li,axis=0)),label=hyper_parameter_name,lw=3)
 		plt.ylim([ylim_down[problem],ylim_up[problem]])
 		plt.yticks([ylim_down[problem],ylim_up[problem]])
@@ -69,7 +65,7 @@ for ind, problem in enumerate([0,4]):
 	means=[]
 	plt.subplot(3,4,2*ind+2)
 	print(problems_name[problem])
-	for setting in [0,1,2,3,4]:
+	for setting in [0,1,2,3,4,5,6]:
 		hyper_parameter_name=10*problem+setting
 		li=[]
 		for seed_num in range(30):
@@ -81,11 +77,8 @@ for ind, problem in enumerate([0,4]):
 				pass
 		#print([len(x) for x in li])
 		li=truncate(li)
-		print(hyper_parameter_name,
-			numpy.mean(li),len(li),
-			len(li[0]),
-			numpy.mean(numpy.mean(li,axis=0)[-10:]))
 		means.append(numpy.mean(li))
+	print(means)
 	plt.plot(means,lw=3)
 	#plt.ylim([ylim_down[problem],ylim_up[problem]])
 	#plt.yticks([ylim_down[problem],ylim_up[problem]])
@@ -99,22 +92,19 @@ problems_name=['Pendulum_safety','LunarLander','Bipedal','Ant','Cheetah_safety',
 for ind, problem in enumerate([0,4]):
 	plt.subplot(3,4,4+ ind*2 +1)
 	print(problems_name[problem])
-	for setting in [0,1,2,3,4]:
+	for setting in [0,1,2,3,4,5,6]:
 		hyper_parameter_name=10*problem+setting
 		li=[]
 		for seed_num in range(10):
 			try:
 				temp=numpy.loadtxt("rbf_results/"+str(hyper_parameter_name)+"/safety_"+str(seed_num)+".txt")
 				li.append(temp)
+				#print(len(temp))
 			except:
 				#print("problem")
 				pass
 		#print([len(x) for x in li])
 		li=truncate(li)
-		print(hyper_parameter_name,
-			numpy.mean(li),len(li),
-			len(li[0]),
-			numpy.mean(numpy.mean(li,axis=0)[-10:]))
 		plt.plot(smooth(numpy.mean(li,axis=0)),label=hyper_parameter_name,lw=3)
 		plt.ylim([0.7,1])
 		#plt.yticks([0.7,1])
@@ -128,7 +118,7 @@ for ind, problem in enumerate([0,4]):
 	means=[]
 	plt.subplot(3,4,4+ ind*2 +2)
 	print(problems_name[problem])
-	for setting in [0,1,2,3,4]:
+	for setting in [0,1,2,3,4,5,6]:
 		hyper_parameter_name=10*problem+setting
 		li=[]
 		for seed_num in range(10):
@@ -140,10 +130,6 @@ for ind, problem in enumerate([0,4]):
 				pass
 		#print([len(x) for x in li])
 		li=truncate(li)
-		print(hyper_parameter_name,
-			numpy.mean(li),len(li),
-			len(li[0]),
-			numpy.mean(numpy.mean(li,axis=0)[-10:]))
 		means.append(numpy.mean(li))
 	plt.plot(means,lw=3)
 	plt.title(problems_name[problem])
@@ -156,7 +142,7 @@ problems_name=['Pendulum_safety_and_return','LunarLander','Bipedal','Ant','Cheet
 for ind, problem in enumerate([0,4]):
 	plt.subplot(3,4,8+ ind*2+1)
 	print(problems_name[problem])
-	for setting in [0,1,2,3,4]:
+	for setting in [0,1,2,3,4,5,6]:
 		hyper_parameter_name=10*problem+setting
 		li=[]
 		for seed_num in range(10):
@@ -168,10 +154,6 @@ for ind, problem in enumerate([0,4]):
 				pass
 		#print([len(x) for x in li])
 		li=truncate(li)
-		print(hyper_parameter_name,
-			numpy.mean(li),len(li),
-			len(li[0]),
-			numpy.mean(numpy.mean(li,axis=0)[-10:]))
 		plt.plot(smooth(numpy.mean(li,axis=0)),label=hyper_parameter_name,lw=3)
 		plt.ylim([ylim_down[problem],ylim_up[problem]])
 		plt.yticks([ylim_down[problem],ylim_up[problem]])
@@ -182,23 +164,21 @@ for ind, problem in enumerate([0,4]):
 	means=[]
 	plt.subplot(3,4,8+ ind*2+2)
 	print(problems_name[problem])
-	for setting in [0,1,2,3,4]:
+	for setting in [0,1,2,3,4,5,6]:
 		hyper_parameter_name=10*problem+setting
 		li=[]
 		for seed_num in range(10):
 			try:
 				temp=numpy.loadtxt("rbf_results/"+str(hyper_parameter_name)+"/return_and_safety_"+str(seed_num)+".txt")
+				#print(len(temp))
 				li.append(temp)
 			except:
 				#print("problem")
 				pass
 		#print([len(x) for x in li])
 		li=truncate(li)
-		print(hyper_parameter_name,
-			numpy.mean(li),len(li),
-			len(li[0]),
-			numpy.mean(numpy.mean(li,axis=0)[-10:]))
 		means.append(numpy.mean(li))
+	print(means)
 	plt.plot(means,lw=3)
 	#plt.ylim([ylim_down[problem],ylim_up[problem]])
 	#plt.yticks([ylim_down[problem],ylim_up[problem]])

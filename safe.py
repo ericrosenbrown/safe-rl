@@ -347,11 +347,12 @@ if __name__=='__main__':
 		Gp_li.append(Gp)
 		safety_li.append(safe/t)
 		if episode % 5 == 0 and episode>0:	
+			print(len(G_li),len(Gp_li))
 			utils_for_q_learning.save(G_li,params,alg,for_safety=0)
 			utils_for_q_learning.save(safety_li,params,alg,for_safety=1)
 			utils_for_q_learning.save(Gp_li,params, alg,for_safety=2)
 			#Q_object.network.save_weights("rbf_policies/"+hyper_parameter_name+"_model.h5")
-
+	print(len(G_li),len(Gp_li))
 	utils_for_q_learning.save(G_li,params,alg,for_safety=0)
 	utils_for_q_learning.save(safety_li,params,alg,for_safety=1)
-	utils_for_q_learning.save(Gp_li,alg,for_safety=2)
+	utils_for_q_learning.save(Gp_li,params,alg,for_safety=2)
