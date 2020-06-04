@@ -36,7 +36,7 @@ for ind, problem in enumerate([0,4]):
 	for setting in [0,1,2,3,4,5,6]:
 		hyper_parameter_name=10*problem+setting
 		li=[]
-		for seed_num in range(30):
+		for seed_num in range(20):
 			try:
 				temp=numpy.loadtxt("rbf_results/"+str(hyper_parameter_name)+"/reutrn_"+str(seed_num)+".txt")
 				li.append(temp)
@@ -68,7 +68,7 @@ for ind, problem in enumerate([0,4]):
 	for setting in [0,1,2,3,4,5,6]:
 		hyper_parameter_name=10*problem+setting
 		li=[]
-		for seed_num in range(30):
+		for seed_num in range(20):
 			try:
 				temp=numpy.loadtxt("rbf_results/"+str(hyper_parameter_name)+"/reutrn_"+str(seed_num)+".txt")
 				li.append(temp)
@@ -95,7 +95,7 @@ for ind, problem in enumerate([0,4]):
 	for setting in [0,1,2,3,4,5,6]:
 		hyper_parameter_name=10*problem+setting
 		li=[]
-		for seed_num in range(10):
+		for seed_num in range(20):
 			try:
 				temp=numpy.loadtxt("rbf_results/"+str(hyper_parameter_name)+"/safety_"+str(seed_num)+".txt")
 				li.append(temp)
@@ -121,7 +121,7 @@ for ind, problem in enumerate([0,4]):
 	for setting in [0,1,2,3,4,5,6]:
 		hyper_parameter_name=10*problem+setting
 		li=[]
-		for seed_num in range(10):
+		for seed_num in range(20):
 			try:
 				temp=numpy.loadtxt("rbf_results/"+str(hyper_parameter_name)+"/safety_"+str(seed_num)+".txt")
 				li.append(temp)
@@ -145,7 +145,7 @@ for ind, problem in enumerate([0,4]):
 	for setting in [0,1,2,3,4,5,6]:
 		hyper_parameter_name=10*problem+setting
 		li=[]
-		for seed_num in range(10):
+		for seed_num in range(20):
 			try:
 				temp=numpy.loadtxt("rbf_results/"+str(hyper_parameter_name)+"/return_and_safety_"+str(seed_num)+".txt")
 				li.append(temp)
@@ -167,7 +167,7 @@ for ind, problem in enumerate([0,4]):
 	for setting in [0,1,2,3,4,5,6]:
 		hyper_parameter_name=10*problem+setting
 		li=[]
-		for seed_num in range(10):
+		for seed_num in range(20):
 			try:
 				temp=numpy.loadtxt("rbf_results/"+str(hyper_parameter_name)+"/return_and_safety_"+str(seed_num)+".txt")
 				#print(len(temp))
