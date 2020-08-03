@@ -49,7 +49,9 @@ def save(li_returns,params,alg, for_safety):
 	directory=alg+"_results/"+params['hyper_parameters_name']+'/'
 	if not os.path.exists(directory):
 	    os.makedirs(directory)
-	if for_safety==2:
+	if for_safety==3:
+		numpy.savetxt(directory+"lambda_"+str(params['seed_number'])+".txt",li_returns)
+	elif for_safety==2:
 		numpy.savetxt(directory+"return_and_safety_"+str(params['seed_number'])+".txt",li_returns)
 	elif for_safety==1:
 		numpy.savetxt(directory+"safety_"+str(params['seed_number'])+".txt",li_returns)

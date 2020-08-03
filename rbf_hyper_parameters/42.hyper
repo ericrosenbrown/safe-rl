@@ -1,5 +1,5 @@
 env_name,HalfCheetah-v1,string
-max_episode,2000,integer
+max_episode,5000,integer
 num_layers,3,integer
 layer_size,512,integer
 learning_rate,0.0005,float
@@ -8,7 +8,7 @@ target_network_learning_rate,0.005,float
 max_buffer_size,500000,integer
 gamma,0.99,float
 batch_size,256,integer
-num_points,30,integer
+num_points,10,integer
 reward_clip,20,float
 temperature,.5,float
 policy_type,e_greedy,string
@@ -19,4 +19,5 @@ updates_per_batch,1,integer
 optimizer,RMSprop,string
 dropout_rate,0.4,float
 num_layers_action_side,1,integer
-Rmin,-2,float
+Rmin,-20,float
+delta_lambda,0.0005,float

@@ -305,6 +305,8 @@ if __name__=='__main__':
 
 	G_li,Gp_li=[],[]
 	safety_li=[]
+	lambda_li=[]
+	lambda_param = 0
 	for episode in range(params['max_episode']):
 		#train policy with exploration
 		s,done=env.reset(),False
@@ -316,9 +318,12 @@ if __name__=='__main__':
 			#print(s,a)
 			sp,r,done,_=env.step(numpy.array(a))
 			rp = (1-is_safe(params))*params['Rmin']
-			r = r + rp
+			r = lambda_param*r + (1-lambda_param)*rp
 			Q_object.buffer_object.append(s,a,r,done,sp)
 			s=sp
+		print(episode, lambda_param)
+		lambda_li.append(lambda_param)
+		lambda_param = min(lambda_param + params['delta_lambda'],1)
 
 		#now update the Q network
 		for _ in range(params['updates_per_episode']):
@@ -346,13 +351,8 @@ if __name__=='__main__':
 		G_li.append(G)
 		Gp_li.append(Gp)
 		safety_li.append(safe/t)
-		if episode % 5 == 0 and episode>0:	
-			print(len(G_li),len(Gp_li))
-			utils_for_q_learning.save(G_li,params,alg,for_safety=0)
-			utils_for_q_learning.save(safety_li,params,alg,for_safety=1)
-			utils_for_q_learning.save(Gp_li,params, alg,for_safety=2)
-			#Q_object.network.save_weights("rbf_policies/"+hyper_parameter_name+"_model.h5")
-	print(len(G_li),len(Gp_li))
-	utils_for_q_learning.save(G_li,params,alg,for_safety=0)
-	utils_for_q_learning.save(safety_li,params,alg,for_safety=1)
-	utils_for_q_learning.save(Gp_li,params,alg,for_safety=2)
+		utils_for_q_learning.save(G_li,params,alg,for_safety=0)
+		utils_for_q_learning.save(safety_li,params,alg,for_safety=1)
+		utils_for_q_learning.save(Gp_li,params, alg,for_safety=2)
+		utils_for_q_learning.save(lambda_li,params,alg,for_safety=3)
+		#Q_object.network.save_weights("rbf_policies/"+hyper_parameter_name+"_model.h5")
