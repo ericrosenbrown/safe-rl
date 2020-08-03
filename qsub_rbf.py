@@ -15,11 +15,11 @@ if not os.path.exists('pbs_files'):
 	os.makedirs('pbs_files')
 
 min_seed=0
-max_seed=5
+max_seed=10
 
 for seed_num in range(min_seed,max_seed):
 	for domain in [4]:
-		for setting in range(6):
+		for setting in range(6,7):
 			hyper_parameter_name=domain*10+setting
 			outfile="pbs_files/safe_rl{}_{}.pbs".format(str(hyper_parameter_name),
 														  str(seed_num)
